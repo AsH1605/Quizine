@@ -8,5 +8,5 @@ sealed interface UiEvent {
     data object OnCreateConfirmClicked: UiEvent
     data object OnResultConfirmClicked: UiEvent
     data class OnQuizCodeUpdated(val updatedQuizCode: String): UiEvent
-    data class OnNicknameUpdated(val updatedQuizCode: String): UiEvent
+    data class OnNicknameUpdated(val updatedNickname: String): UiEvent
 }

@@ -10,11 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,7 +26,15 @@ import com.cookie.quizine.presentation.home.model.UiEvent
 import com.cookie.quizine.presentation.home.model.UiState
 
 @Composable
-fun HomeScreen(
+fun HomeScreen(viewModel: HomeScreenVM) {
+    val uiState by viewModel.uiState.collectAsState()
+    HomeScreen(uiState, {event->
+        viewModel.onUiEvent(event)
+    })
+}
+
+@Composable
+private fun HomeScreen(
     uiState: UiState,
     uiEvent: (UiEvent) -> Unit
 ) {
@@ -35,28 +44,27 @@ fun HomeScreen(
 
     if (uiState.onCreateQuizDialogVisible) {
         QuizAlertDialog(
-            onAction = {updatedCode->
+            onAction = { updatedCode ->
                 uiEvent(UiEvent.OnQuizCodeUpdated(updatedCode))
-                       },
-            onDismiss = {uiEvent(UiEvent.OnCreateQuizClicked)},
+            },
+            onDismiss = { uiEvent(UiEvent.OnCreateQuizClicked) },
             quizCode = uiState.quizCode,
             action = "Create Quiz",
-            onButtonClick = {uiEvent(UiEvent.OnCreateConfirmClicked)}
+            onButtonClick = { uiEvent(UiEvent.OnCreateConfirmClicked) }
         )
     }
 
     if (uiState.onViewResultDialogVisible) {
         QuizAlertDialog(
-            onAction = {updatedCode->
+            onAction = { updatedCode ->
                 uiEvent(UiEvent.OnQuizCodeUpdated(updatedCode))
-                       },
-            onDismiss = {uiEvent(UiEvent.OnViewResultClicked)},
+            },
+            onDismiss = { uiEvent(UiEvent.OnViewResultClicked) },
             quizCode = uiState.quizCode,
             action = "View Result",
-            onButtonClick = {uiEvent(UiEvent.OnResultConfirmClicked)}
+            onButtonClick = { uiEvent(UiEvent.OnResultConfirmClicked) }
         )
     }
-
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { padding ->
@@ -105,47 +113,51 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JoinQuizAlertDialog(uiEvent: (UiEvent) -> Unit, uiState: UiState) {
     AlertDialog(
-        onDismissRequest = { uiEvent(UiEvent.OnJoinQuizClicked) }
-    ) {
-        Column {
-            TextField(
-                value = uiState.nickname,
-                onValueChange = { updatedNickname ->
-                    uiEvent(UiEvent.OnNicknameUpdated(updatedNickname))
-                },
-                placeholder = {
-                    Text(stringResource(R.string.on_enter_nickname))
-                }
-            )
-            Spacer(Modifier.height(8.dp))
-            TextField(
-                value = uiState.quizCode,
-                onValueChange = { updatedQuizCode ->
-                    uiEvent(UiEvent.OnQuizCodeUpdated(updatedQuizCode))
-                },
-                placeholder = {
-                    Text(stringResource(R.string.on_enter_quizcode))
-                }
-            )
-            Spacer(Modifier.height(8.dp))
+        onDismissRequest = { uiEvent(UiEvent.OnJoinQuizClicked) },
+        title = {
+            Text("Enter Nickname and Quizcode")
+        },
+        text = {
+            Column {
+                TextField(
+                    value = uiState.nickname,
+                    onValueChange = { updatedNickname ->
+                        uiEvent(UiEvent.OnNicknameUpdated(updatedNickname))
+                    },
+                    placeholder = {
+                        Text(stringResource(R.string.on_enter_nickname))
+                    }
+                )
+                Spacer(Modifier.height(8.dp))
+                TextField(
+                    value = uiState.quizCode,
+                    onValueChange = { updatedQuizCode ->
+                        uiEvent(UiEvent.OnQuizCodeUpdated(updatedQuizCode))
+                    },
+                    placeholder = {
+                        Text(stringResource(R.string.on_enter_quizcode))
+                    }
+                )
+                Spacer(Modifier.height(8.dp))
+
+            }
+        },
+        confirmButton = {
             Button(
                 onClick = {
                     uiEvent(UiEvent.OnJoinConfirmClicked)
                 },
-                shape = RoundedCornerShape(4.dp),
-                modifier = Modifier.align(Alignment.End)
+                shape = RoundedCornerShape(4.dp)
             ) {
                 Text(stringResource(R.string.on_join_button))
             }
         }
-    }
+    )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizAlertDialog(
     onAction: (String) -> Unit,
@@ -155,9 +167,11 @@ fun QuizAlertDialog(
     onButtonClick: () -> Unit
 ) {
     AlertDialog(
-        onDismissRequest = { onDismiss() }
-    ) {
-        Column {
+        onDismissRequest = { onDismiss() },
+        title = {
+            Text("Enter Quiz Code")
+        },
+        text = {
             TextField(
                 value = quizCode,
                 onValueChange = { updatedQuizCode ->
@@ -167,18 +181,18 @@ fun QuizAlertDialog(
                     Text(stringResource(R.string.on_enter_quizcode))
                 }
             )
-            Spacer(Modifier.height(8.dp))
+        },
+        confirmButton = {
             Button(
                 onClick = {
                     onButtonClick()
                 },
-                shape = RoundedCornerShape(4.dp),
-                modifier = Modifier.align(Alignment.End)
+                shape = RoundedCornerShape(4.dp)
             ) {
                 Text(action)
             }
         }
-    }
+    )
 }
 
 @Preview
@@ -186,8 +200,8 @@ fun QuizAlertDialog(
 private fun HomeScreenPrev1() {
     HomeScreen(
         uiState = UiState(
-            onJoinQuizDialogVisible = true,
-            onCreateQuizDialogVisible = false,
+            onJoinQuizDialogVisible = false,
+            onCreateQuizDialogVisible = true,
             onViewResultDialogVisible = false,
             nickname = "",
             quizCode = ""
