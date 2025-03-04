@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Quizine</string>
+    <string name="on_join_quiz">Join Quiz</string>
+    <string name="on_create_quiz">Create Quiz</string>
+    <string name="view_quiz_result">View Quiz Result</string>
+    <string name="on_enter_nickname">Enter Nickname</string>
+    <string name="on_enter_quizcode">Enter Quizcode</string>
+    <string name="on_join_button">Join Quiz</string>
+</resources>
