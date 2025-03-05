@@ -26,10 +26,20 @@ import com.cookie.quizine.presentation.home.model.UiEvent
 import com.cookie.quizine.presentation.home.model.UiState
 
 @Composable
-fun HomeScreen(viewModel: HomeScreenVM) {
+fun HomeScreen(
+    viewModel: HomeScreenVM,
+    navigateToQuiz: (String, String) -> Unit,
+    navigateToResult: (String) -> Unit,
+    navigateToCreate: () -> Unit
+    ) {
     val uiState by viewModel.uiState.collectAsState()
     HomeScreen(uiState, {event->
-        viewModel.onUiEvent(event)
+        when(event){
+            UiEvent.OnCreateConfirmClicked -> {navigateToCreate()}
+            UiEvent.OnJoinConfirmClicked -> {navigateToQuiz(uiState.nickname, uiState.quizCode)}
+            UiEvent.OnResultConfirmClicked -> {navigateToResult(uiState.quizCode)}
+            else -> {viewModel.onUiEvent(event)}
+        }
     })
 }
 
