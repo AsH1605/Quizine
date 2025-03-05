@@ -26,3 +26,18 @@
     </application>
 
 </manifest>
+
+<!--singleton (a class with a single instance)
+-> class -> object keyword like a class with set of constants
+    a class without members and only companion object is equivalent to a singleton class.
+
+    static -> anything that does not require object creation for that class are defined as static here companion object
+    [members in class]
+
+    by -> we dont directly assign a value to a variable inst6ead we refer it to a delegate which provide it with setter and getter methods.
+
+   init -> initialize an object, its body of constructor of class
+    == -> for value and === -> for memory location
+
+    lambda functions-> pass function as parameter to another function
+-->

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.cookie.quizine.presentation.App
 import com.cookie.quizine.presentation.home.HomeScreen
 import com.cookie.quizine.presentation.home.HomeScreenVM
 import com.cookie.quizine.presentation.theme.QuizineTheme
@@ -22,8 +23,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QuizineTheme {
-                val viewModel: HomeScreenVM = viewModel()
-                HomeScreen(viewModel)
+                App()
             }
         }
     }
