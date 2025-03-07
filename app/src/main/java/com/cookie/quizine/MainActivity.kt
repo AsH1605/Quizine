@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cookie.quizine.presentation.App
 import com.cookie.quizine.presentation.home.HomeScreen
 import com.cookie.quizine.presentation.home.HomeScreenVM
+import com.cookie.quizine.presentation.pizza.PizzaScreen
 import com.cookie.quizine.presentation.theme.QuizineTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QuizineTheme {
-                App()
+                PizzaScreen()
             }
         }
     }
